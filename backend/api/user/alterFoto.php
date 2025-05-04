@@ -13,48 +13,82 @@ $con = conecta_mysql();
 
 $id = $_POST['id'] ?? null;  // Captura o ID da requisição POST
 $newFoto = $_FILES['foto'] ?? null;  // Captura o arquivo de foto
-// var_dump($_FILES);
+
 if (!$newFoto || $newFoto['error'] !== UPLOAD_ERR_OK) {
     // Verifica se o arquivo foi enviado corretamente
     echo json_encode(['status' => 'error', 'message' => 'Erro ao enviar o arquivo!']);
     return;
 }
 
-function alterFoto($id, $newFoto)
-{
+function alterFoto($id, $newFoto) {
     global $con;
-    $query1 = "SELECT * FROM users WHERE id = $id";
-    $result = mysqli_query($con, $query1);
-    $user = mysqli_fetch_assoc($result);
 
-    $novoNomeFoto = uploadFoto($newFoto, $user['img']);
-    if (!$novoNomeFoto) {
-        echo json_encode(['status' => 'error', 'message' => 'Erro ao salvar a foto!']);
-        return;
-    }
-    $query2 = "UPDATE users SET img = '$novoNomeFoto' WHERE id = $id";
-    if (mysqli_query($con, $query2)) {
-        $caminho = 'http://127.0.0.1:8080' . '/uploads/perfil/' . $novoNomeFoto;
-        $user['img'] = $caminho;
-        $user['password'] = null;
-        $payload = createPayLoad($user);
-        $token = createToken($payload);
-        echo json_encode(['status' => 'success', 'message' => 'Foto alterada com sucesso!', 'token' => $token]);
-        return;
+    // Preparar a consulta para buscar o usuário
+    $query1 = "SELECT * FROM users WHERE id = ?";
+    $stmt1 = $con->prepare($query1);
+
+    if ($stmt1) {
+        $stmt1->bind_param("i", $id);
+        $stmt1->execute();
+        $result = $stmt1->get_result();
+
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
+
+            // Fazer o upload da nova foto
+            $novoNomeFoto = uploadFoto($newFoto, $user['img']);
+            if (!$novoNomeFoto) {
+                echo json_encode(['status' => 'error', 'message' => 'Erro ao salvar a foto!']);
+                return;
+            }
+
+            // Preparar a consulta para atualizar a foto no banco de dados
+            $query2 = "UPDATE users SET img = ? WHERE id = ?";
+            $stmt2 = $con->prepare($query2);
+
+            if ($stmt2) {
+                $stmt2->bind_param("si", $novoNomeFoto, $id);
+                $updateResult = $stmt2->execute();
+
+                if ($updateResult) {
+                    $caminho = 'http://127.0.0.1:8080/uploads/perfil/' . $novoNomeFoto;
+                    $user['img'] = $caminho;
+                    $user['password'] = null;
+                    $payload = createPayLoad($user);
+                    $token = createToken($payload);
+
+                    echo json_encode([
+                        'status' => 'success',
+                        'message' => 'Foto alterada com sucesso!',
+                        'token' => $token
+                    ]);
+                    return;
+                } else {
+                    echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o banco de dados!']);
+                    return;
+                }
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Erro ao preparar a consulta de atualização!']);
+                return;
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Usuário não encontrado!']);
+            return;
+        }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Erro ao atualizar o banco de dados!']);
+        echo json_encode(['status' => 'error', 'message' => 'Erro ao preparar a consulta de busca!']);
         return;
     }
 }
 
-function uploadFoto($newFoto, $fotoAntiga)
-{
+function uploadFoto($newFoto, $fotoAntiga) {
     $pastaDestino = '../../uploads/perfil/';
 
     if (!is_dir($pastaDestino)) {
         mkdir($pastaDestino, 0777, true);
     }
 
+    // Remover a foto antiga, se existir
     if ($fotoAntiga && file_exists($pastaDestino . $fotoAntiga)) {
         unlink($pastaDestino . $fotoAntiga);
     }

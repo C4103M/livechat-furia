@@ -34,7 +34,7 @@ function Header() {
                 <div className="flex items-center">
                     <img src={logo} alt="FURIA LOGO" className="h-[3em] m-[15px] p-[.5em]" />
                     <h1 className="text-[1.5em] m-4 p-[.4em] cursor-pointer" onClick={redirectHome}>
-                        FURIA CHAT
+                        PORTAL FURIA
                     </h1>
                 </div>
 

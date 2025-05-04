@@ -4,23 +4,44 @@ header("Access-Control-Allow-Origin: *"); // ou use o domínio específico, ex: 
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");
-$userId = $_GET['id'] ? $_GET['id'] : null;
-// $userId = 6;
-// Include database connection
+
+$userId = $_GET['id'] ?? null;
+
 function userDelete($userId) {
     $conn = conecta_mysql();
-    $querry = "DELETE FROM users WHERE id = $userId";
-    $result = mysqli_query($conn, $querry);
-    if ($result) {
-        return json_encode(array("status" => "success", "message" => "User deleted successfully."));
+
+    // Preparar a consulta para evitar SQL Injection
+    $query = "DELETE FROM users WHERE id = ?";
+    $stmt = $conn->prepare($query);
+
+    if ($stmt) {
+        $stmt->bind_param("i", $userId); // Vincula o parâmetro como inteiro
+        $result = $stmt->execute();
+
+        if ($result) {
+            return json_encode([
+                "status" => "success",
+                "message" => "Usuário deletado com sucesso."
+            ]);
+        } else {
+            return json_encode([
+                "status" => "error",
+                "message" => "Erro ao deletar usuário: " . $stmt->error
+            ]);
+        }
     } else {
-        return json_encode(array("status" => "error", "message" => "Error deleting user: " . mysqli_error($conn)));
+        return json_encode([
+            "status" => "error",
+            "message" => "Erro ao preparar a consulta."
+        ]);
     }
-    
 }
 
-if($userId) {
+if ($userId) {
     echo userDelete($userId);
 } else {
-    echo json_encode(array("status" => "error", "message" => "User ID is required."));
+    echo json_encode([
+        "status" => "error",
+        "message" => "O ID do usuário é obrigatório."
+    ]);
 }

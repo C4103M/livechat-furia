@@ -4,6 +4,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");
+
 $con = conecta_mysql();
 
 $titulo = isset($_POST['titulo']) ? $_POST['titulo'] : null;
@@ -14,48 +15,48 @@ $imagem = isset($_FILES['imagem']) ? $_FILES['imagem'] : null;
 $autor_id = isset($_POST['autor_id']) ? $_POST['autor_id'] : null;
 $categoria = isset($_POST['categoria']) ? $_POST['categoria'] : null;
 
-function insertPost($titulo, $subtitulo, $slug, $conteudo, $imagem, $autor_id, $categoria)
-{
-    global $con;
+function insertPost($titulo, $subtitulo, $slug, $conteudo, $imagem, $autor_id, $categoria, $con) {
     $imagem_url = insertImagePost($imagem);
     if ($imagem_url) {
         $imagem_url = 'http://127.0.0.1:8080/uploads/postsImg/' . $imagem_url;
     } else {
         $imagem_url = ''; // ou NULL, mas vazio é melhor se for string no banco
     }
-    $imagem_url = mysqli_real_escape_string($con, $imagem_url ?? '');
-    $titulo = mysqli_real_escape_string($con, $titulo);
-    $subtitulo = mysqli_real_escape_string($con, $subtitulo);
-    $slug = mysqli_real_escape_string($con, $slug);
-    $conteudo = mysqli_real_escape_string($con, $conteudo);
-    $imagem_url = mysqli_real_escape_string($con, $imagem_url);
-    $categoria = mysqli_real_escape_string($con, $categoria);
 
-    $autor_nome = getAutorNome($autor_id);
+    $autor_nome = getAutorNome($autor_id, $con);
 
+    // Usando prepared statements para evitar SQL Injection
+    $query = "INSERT INTO posts (titulo, subtitulo, slug, conteudo, imagem_url, autor_id, autor_nome, categoria) 
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $con->prepare($query);
 
-    $post_querry = "INSERT INTO posts (titulo, subtitulo, slug, conteudo, imagem_url, autor_id, autor_nome, categoria) VALUES 
-    ('$titulo', '$subtitulo', '$slug', '$conteudo', '$imagem_url', '$autor_id', '$autor_nome', '$categoria')";
-    $result = mysqli_query($con, $post_querry);
-    if ($result) {
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Publicação realizada com sucesso!',
-            'codigo' => ''
-        ]);
-        return;
+    if ($stmt) {
+        $stmt->bind_param("ssssssss", $titulo, $subtitulo, $slug, $conteudo, $imagem_url, $autor_id, $autor_nome, $categoria);
+        $result = $stmt->execute();
+
+        if ($result) {
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Publicação realizada com sucesso!',
+                'codigo' => 200
+            ]);
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Erro ao inserir publicação.',
+                'codigo' => 500
+            ]);
+        }
     } else {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Erro ao verificar usuário',
-            'codigo' => ''
+            'message' => 'Erro ao preparar a consulta.',
+            'codigo' => 500
         ]);
-        return;
     }
 }
 
-function insertImagePost($imagem)
-{
+function insertImagePost($imagem) {
     if (!$imagem || !isset($imagem['name']) || !isset($imagem['tmp_name'])) {
         return false;
     }
@@ -76,18 +77,29 @@ function insertImagePost($imagem)
     }
 }
 
-function getAutorNome($id) {
-    global $con;
-    $querry = "SELECT name FROM users WHERE id = '$id'";
-    $result = mysqli_query($con, $querry);
-    if($result) {
-        $row = mysqli_fetch_assoc($result);
-        return $row['name'];
-    }
+function getAutorNome($id, $con) {
+    $query = "SELECT name FROM users WHERE id = ?";
+    $stmt = $con->prepare($query);
 
+    if ($stmt) {
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['name'];
+        }
+    }
+    return null;
 }
 
-
-if ($titulo) {
-    insertPost($titulo, $subtitulo, $slug, $conteudo, $imagem, $autor_id, $categoria);  
+if ($titulo && $subtitulo && $slug && $conteudo && $autor_id && $categoria) {
+    insertPost($titulo, $subtitulo, $slug, $conteudo, $imagem, $autor_id, $categoria, $con);
+} else {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Dados incompletos.',
+        'codigo' => 400
+    ]);
 }

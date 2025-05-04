@@ -8,22 +8,38 @@ $con = conecta_mysql();
 
 function listNews() {
     global $con;
-    $query = "SELECT * FROM posts";
-    $result = mysqli_query($con, $query);
 
-    if ($result) {
-        $news = mysqli_fetch_all($result, MYSQLI_ASSOC); // Retorna todas as linhas como um array associativo
-        return json_encode([
-            'status' => 'success',
-            'message' => 'Operação realizada com sucesso!',
-            'codigo' => '',
-            'data' => $news // Retorna todas as notícias
-        ]);
+    // Preparar a consulta
+    $query = "SELECT * FROM posts";
+    $stmt = $con->prepare($query);
+
+    if ($stmt) {
+        // Executar a consulta
+        $stmt->execute();
+
+        // Obter o resultado
+        $result = $stmt->get_result();
+
+        if ($result) {
+            $news = $result->fetch_all(MYSQLI_ASSOC); // Retorna todas as linhas como um array associativo
+            return json_encode([
+                'status' => 'success',
+                'message' => 'Operação realizada com sucesso!',
+                'codigo' => 200,
+                'data' => $news // Retorna todas as notícias
+            ]);
+        } else {
+            return json_encode([
+                'status' => 'error',
+                'message' => 'Erro ao obter os resultados',
+                'codigo' => 500
+            ]);
+        }
     } else {
         return json_encode([
             'status' => 'error',
-            'message' => 'Erro ao realizar a consulta',
-            'codigo' => ''
+            'message' => 'Erro ao preparar a consulta',
+            'codigo' => 500
         ]);
     }
 }
