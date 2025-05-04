@@ -33,7 +33,7 @@ Sistema web que simula um ambiente interativo de fãs do jogo **Fúria**, com ch
     ```
 
 2. Configure o ambiente:
-    - Crie um arquivo `.env` com as variáveis necessárias (ex: `DB_HOST`, `DB_USER`, etc).
+    - Edite o arquivo dentro da pasta config do Backend chamado conexao.php com as variáveis necessárias para conexão com o banco de dados;
     - Suba o ambiente com Docker:
 
     ```bash
