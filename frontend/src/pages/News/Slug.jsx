@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as postService from '../../services/postsService';
 import Header from '../../components/Header/Header';
+import Comentarios from '../../components/Coments/Comentarios';
 function Slug() {
     const { slug } = useParams();
     const [noticia, setNoticia] = useState({});
@@ -20,7 +21,7 @@ function Slug() {
     }, [slug])
     useEffect(() => {
         if (noticia && noticia.data) {
-            console.log(noticia.data);
+            // console.log(noticia.data);
             setVisibleContent(true);
         }
     }, [noticia])
@@ -43,11 +44,13 @@ function Slug() {
                             <img src={noticia.data.imagem_url} alt="" />
                         </div>
                         <p className='text-gray-500 text-end'>Categoria: {noticia.data.categoria}</p>
+                        <Comentarios slug={slug}/>
                     </div>
                 </div>
             ) : (
                 <p>Carregando notícia...</p>
             )}
+            
         </>
     );
 }

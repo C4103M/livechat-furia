@@ -99,3 +99,40 @@ export async function atualizarPost(slug, formulario, imagem) {
         return { 'status': 'error', 'message': 'Erro ao realizar a requisição', 'codigo': '' };
     }
 }
+
+export async function getComents(slug) {
+    try {
+        const url = `http://localhost:8080/api/posts/buscarComentarios.php?slug=${slug}`
+        const response = await fetch(url, {
+            method: 'GET',
+        })
+        const result = await response.json();
+        // if(result) {
+        //     console.log(result);
+        // }
+        return result;
+
+    } catch {
+        console.log("Erro na requisição");
+        
+    }
+}
+
+export async function inserirComentario(slug, id_autor, conteudo) {
+    const formData = new FormData;
+    formData.append('slug', slug);
+    formData.append('id_autor', id_autor);
+    formData.append('conteudo', conteudo);
+    try {
+        const url = "http://localhost:8080/api/posts/inserirComentario.php";
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+        return result;
+    } catch {
+        console.log("Erro na requisição");
+        
+    }
+}

@@ -2,7 +2,7 @@ import jwtDecode from 'jwt-decode';
 export function decodeToken(token) {
     try {
         const decoded = jwtDecode(token);
-        console.log(decoded);
+        // console.log(decoded);
         return decoded;
     } catch (error) {
         console.error('Error decoding token:', error);
