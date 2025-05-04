@@ -8,6 +8,7 @@ import Admin from './pages/Admin/Admin.jsx'
 import News from './pages/News/News.jsx'
 import CreatePost from './pages/Admin/CreatePost.jsx'
 import PostDetalhado from './pages/News/Slug.jsx'
+import Chat from './pages/Chat/Chat.jsx'
 import Moderate from './pages/Admin/Moderate.jsx'
 import EditPost from './pages/Admin/EditPost.jsx'
 import EditPostExpand from './pages/Admin/EditPostExpand.jsx'
@@ -30,6 +31,7 @@ function App() {
 					<Route path="/moderate" element={<Moderate/>} />
 					<Route path="/editPosts" element={<EditPost/>}/>
 					<Route path="/edit/:slug" element={<EditPostExpand />} />
+					<Route path="/chat/:user_id" element={<Chat />} />
 				</Routes>
 			</BrowserRouter>
 		</>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import profileDefault from '../../assets/profile-default.png';
 import jwtDecode from 'jwt-decode';
 import * as authService from '../../services/authService.js';
 function ListUsers() {
+    const navigate = useNavigate();
     const [isExpanded, setIsExpanded] = useState(false);
     const [usuarios, setUsuarios] = useState([]);
     const [limiteUsuarios, setLimiteUsuarios] = useState(3);
@@ -35,7 +37,7 @@ function ListUsers() {
         if (token) {
             isLoged(true);
             setDados(jwtDecode(token));
-            // console.log(jwtDecode(token));
+            console.log(jwtDecode(token));
 
         } else {
             isLoged(false);
@@ -53,7 +55,7 @@ function ListUsers() {
 
                 <div className={`w-[100%] flex flex-col justify-center transition-all duration-500 ease-in-out overflow-hidden ${isExpanded ? 'max-h-96 opacity-100 mt-2 overflow-y-scroll' : 'max-h-0 opacity-0'}`}>
                     {loged && Array.isArray(usuarios) &&  (usuarios.slice(0, limiteUsuarios).map(usuario => (
-                        <div key={usuario.id} className='w-[100%] h-fit flex gap-10 justify-between items-center border-2 border-[var(--main-border-color)] rounded-lg p-4 bg-gray-900 mt-2'>
+                        <div key={usuario.id} className={`w-[100%] h-fit flex gap-10 justify-between items-center border-2 border-[var(--main-border-color)] rounded-lg p-4 bg-gray-900 mt-2 ${usuario.id === dados.data.id ? 'hidden' : ''}`}>
                             <div className='flex gap-5 items-center'>
                                 <div className='w-15 rounded-full aspect-square overflow-hidden border-2 border-[var(--main-border-color)] flex justify-center items-center bg-gray-800'>
                                     <img src={usuario.img ? usuario.img : profileDefault} alt="Perfil"  />
@@ -62,9 +64,9 @@ function ListUsers() {
                                 <p className='font-medium text-lg'>{usuario.name}</p>
                                 {/* {usuario.img} */}
                             </div>
-                            {/* <button>
+                            <button onClick={() => navigate(`/chat/${usuario.id}`)}>
                                 <i className="fa-regular fa-comment scale-[1.5]"></i>
-                            </button> */}
+                            </button>
                         </div>
                     )))}
                     {!loged && (<p>Faça Log-in para conversar com outros usuários</p>)}

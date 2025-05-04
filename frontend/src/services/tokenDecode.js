@@ -32,10 +32,10 @@ export function isAdmin(token) {
     }
 }
 
-// export function isLogin(token) {
+// export function isLoged(token) {
 //     const decoded = decodeToken(token);
 //     if(decoded) {
-//         isTokenExpired(token);
+        
 
 //     }
 // }
