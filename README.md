@@ -16,7 +16,7 @@ Sistema web que simula um ambiente interativo de fãs do jogo **Fúria**, com ch
 
 ## 🚀 Tecnologias utilizadas
 
-- **Frontend:** Vue.js  
+- **Frontend:** Vite.js/React  
 - **Backend:** PHP  
 - **Banco de dados:** MySQL  
 - **Comunicação em tempo real:** WebSockets (ou long-polling)  
@@ -75,6 +75,11 @@ Este projeto está sob a licença **MIT**. Veja o arquivo `LICENSE` para mais in
 
 ---
 
+## 📄 API
+
+A API está toda documentada, leia `API` para mais informações.
+
+---
 ## ✉️ Contato
 
 Para dúvidas ou sugestões, entre em contato:  
