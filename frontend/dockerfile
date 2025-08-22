@@ -1,20 +1,14 @@
-# Use the official Node.js image as the base image
-FROM node:18-alpine
+FROM node:20-alpine AS build
 
-# Diretório de trabalho dentro do container
 WORKDIR /app
-
-# Copiar package.json e package-lock.json
 COPY package*.json ./
-
-# Instala as dependências
 RUN npm install
-
-# Copia os demais arquivos
 COPY . .
+RUN npm run build
+# CMD ["tail", "-f", "/dev/null"]  # Mantém o container vivo após build
+# CMD tail -f /dev/null
 
-# Expõe a porta padrão do Vite
-EXPOSE 5173
-
-# Comando padrão para iniciar o servidor dev
-CMD ["npm", "run", "dev"]
+# Etapa 2: servir com Nginx
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf

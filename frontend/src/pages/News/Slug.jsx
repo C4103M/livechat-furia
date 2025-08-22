@@ -21,7 +21,7 @@ function Slug() {
     }, [slug])
     useEffect(() => {
         if (noticia && noticia.data) {
-            // console.log(noticia.data);
+            console.log(noticia.data);
             setVisibleContent(true);
         }
     }, [noticia])
@@ -41,7 +41,7 @@ function Slug() {
                             {noticia.data.conteudo}
                         </p>
                         <div className='flex justify-center'>
-                            <img src={noticia.data.imagem_url} alt="" />
+                            <img src={noticia.data.imagem} alt="" />
                         </div>
                         <p className='text-gray-500 text-end'>Categoria: {noticia.data.categoria}</p>
                         <Comentarios slug={slug}/>

@@ -68,7 +68,7 @@ function EditPostExpand() {
             if(result) {
                 setStatus(result);
             }
-            // console.log('Post atualizado com sucesso:', response);
+            console.log('Post atualizado com sucesso:', response);
         } catch (error) {
             console.error('Erro ao atualizar o post:', error);
         }

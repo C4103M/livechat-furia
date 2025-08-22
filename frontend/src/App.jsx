@@ -13,7 +13,6 @@ import Moderate from './pages/Admin/Moderate.jsx'
 import EditPost from './pages/Admin/EditPost.jsx'
 import EditPostExpand from './pages/Admin/EditPostExpand.jsx'
 function App() {
-	const [count, setCount] = useState(0)
 
 	return (
 		<>

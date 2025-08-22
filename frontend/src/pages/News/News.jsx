@@ -43,9 +43,9 @@ function News() {
                                 className="border rounded-xl shadow-md p-4 mb-6 flex flex-col md:flex-row gap-4 hover:shadow-lg transition-shadow duration-300 bg-gray-800"
                             >
                                 {/* Imagem */}
-                                {noticia.imagem_url && (
+                                {noticia.imagem && (
                                     <img
-                                        src={noticia.imagem_url}
+                                        src={noticia.imagem}
                                         alt={noticia.titulo}
                                         className="w-full md:w-48 h-32 object-cover rounded-md"
                                     />

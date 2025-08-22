@@ -26,7 +26,7 @@ function insertPost($titulo, $subtitulo, $slug, $conteudo, $imagem, $autor_id, $
     $autor_nome = getAutorNome($autor_id, $con);
 
     // Usando prepared statements para evitar SQL Injection
-    $query = "INSERT INTO posts (titulo, subtitulo, slug, conteudo, imagem_url, autor_id, autor_nome, categoria) 
+    $query = "INSERT INTO posts (titulo, subtitulo, slug, conteudo, imagem, autor_id, autor_nome, categoria) 
               VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $con->prepare($query);
 

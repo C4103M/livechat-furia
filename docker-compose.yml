@@ -1,13 +1,10 @@
 services:
   frontend:
-    build:
-      context: ./frontend
+    build: ./frontend
+    container_name: frontend_furia_container
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    command: npm run dev -- --host --port 5173
+      - "8083:80"
+    
 
   backend:
     build:

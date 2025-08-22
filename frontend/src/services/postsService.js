@@ -15,8 +15,8 @@ export async function inserirPost(formulario, imagem) {
             method: 'POST',
             body: formData,
         })
-        const result = await response.json();
-        // console.log(result);
+        const result = await response.text();
+        console.log(result);
         if (result) {
             // console.log(result.status);
             // console.log(result.message);
@@ -91,12 +91,12 @@ export async function atualizarPost(slug, formulario, imagem) {
         const result = await response.json();
         console.log(result);
         if (result) {
-            // console.log(result.status);
-            // console.log(result.message);
+            console.log(result.status);
+            console.log(result.message);
             return result;
         }
-    } catch {
-        return { 'status': 'error', 'message': 'Erro ao realizar a requisição', 'codigo': '' };
+    } catch (e){
+        return { 'status': 'error', 'message': 'Erro ao realizar a requisição', 'codigo': '', 'erro': e};
     }
 }
 

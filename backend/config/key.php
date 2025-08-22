@@ -1,5 +1,5 @@
 <?php 
 return [
-    'key' => 'éinevitávelteamarassimjatenteidetudopoifadsfasdfifhasoihfasdfibhdfigdsduDFSDFSIHGDFSGIUGAFSGFGDFSdfsaDFSADFSdfsdfsghuDFSOIYUGDFSIdfDFSG', // Substitua pela sua chave secreta
+    'key' => 'éinevitávelteamarassimjatenteidetudopoifadsfasdfifhasoihfasdfibhdfigdsduDFSDFSIHGDFSGIUGAFSGFGDFSdfsaDFSADFSdfsdfsghuDFSOIYUGDFSIdfDFSG', 
     'algoritmo' => 'HS256', // Algoritmo de codificação do JWT
 ];
