@@ -1,10 +1,10 @@
-# 🐲 Projeto: Portal Interativo Fúria
+# Projeto: Portal Interativo Fúria
 
 Sistema web que simula um ambiente interativo de fãs do jogo **Fúria**, com chat ao vivo, portal de notícias e mensagens diretas entre usuários.
 
 ---
 
-## 📌 Funcionalidades principais
+## Funcionalidades principais
 
 - 💬 **Livechat** público com atualização em tempo real  
 - 📰 **Portal de notícias** com atualizações sobre o jogo Fúria e seção de comentários  
@@ -14,7 +14,7 @@ Sistema web que simula um ambiente interativo de fãs do jogo **Fúria**, com ch
 
 ---
 
-## 🚀 Tecnologias utilizadas
+## Tecnologias utilizadas
 
 - **Frontend:** Vite.js/React  
 - **Backend:** PHP  
@@ -24,7 +24,7 @@ Sistema web que simula um ambiente interativo de fãs do jogo **Fúria**, com ch
 
 ---
 
-## 🛠️ Instalação e execução
+## Instalação e execução
 
 1. Clone o repositório:
 
@@ -34,8 +34,9 @@ Sistema web que simula um ambiente interativo de fãs do jogo **Fúria**, com ch
 
 2. Configure o ambiente:
     - Edite o arquivo dentro da pasta config do Backend chamado conexao.php com as variáveis necessárias para conexão com o banco de dados;
+    - Garanta que o Docker Desktop (no windows) esteja instalado
     - Suba o ambiente com Docker:
-
+    - Garanta que todas as portas utilizadas estejam livres antes de subir os containers (ou altere as portas no arquivo docker-compose.yml)
     ```bash
     docker-compose up -d
     ```
@@ -43,12 +44,12 @@ Sistema web que simula um ambiente interativo de fãs do jogo **Fúria**, com ch
 3. Acesse o projeto:
 
     ```
-    http://localhost:8000
+    http://localhost:8083
     ```
 
 ---
 
-## 🧪 Testes
+## Testes
 
 *Em desenvolvimento*  
 Planejado para uso com:
@@ -57,7 +58,7 @@ Planejado para uso com:
 
 ---
 
-## 🤝 Contribuições
+## Contribuições
 
 Quer contribuir? Siga os passos abaixo:
 
@@ -69,18 +70,18 @@ Quer contribuir? Siga os passos abaixo:
 
 ---
 
-## 📄 Licença
+## Licença
 
 Este projeto está sob a licença **MIT**. Veja o arquivo `LICENSE` para mais informações.
 
 ---
 
-## 📄 API
+## API
 
 A API está toda documentada, leia `API` para mais informações.
 
 ---
-## ✉️ Contato
+## Contato
 
 Para dúvidas ou sugestões, entre em contato:  
 📧 [caioemanoel36@gmail.com]
