@@ -29,7 +29,7 @@ Sistema web que simula um ambiente interativo de fãs do jogo **Fúria**, com ch
 1. Clone o repositório:
 
     ```bash
-    git clone https://github.com/C4103M/Furia-Chalenge.git
+    git clone https://github.com/C4103M/livechat-furia.git
     ```
 
 2. Configure o ambiente:
